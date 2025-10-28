@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Make a Payment</title>
+  <link rel="stylesheet" href="payment.css">
+<body>
+
+  <main>
+    <section>
+      <h2>Make a Payment</h2>
+      <form action="https://your-backend.com/process-payment" method="POST">
+        <label for="item">Select Item</label>
+        <select name="item" id="item" required>
+          <option value="">-- Choose Clothing Item --</option>
+          <option value="Classic T-Shirt">Classic T-Shirt – ZMW 250</option>
+          <option value="Comfy Hoodie">Comfy Hoodie – ZMW 350</option>
+          <option value="Denim Jeans">Denim Jeans – ZMW 400</option>
+        </select>
+
+        <label for="phone">Mobile Number</label>
+        <input type="tel" name="phone" id="phone" placeholder="e.g. 0966123456" required>
+
+        <label for="network">Mobile Network</label>
+        <select name="network" id="network" required>
+          <option value="">-- Choose Network --</option>
+          <option value="MTN">MTN Mobile Money</option>
+          <option value="Airtel">Airtel Money</option>
+        </select>
+
+        <button type="submit">Pay Now</button>
+      </form>
+      <p class="note">You will receive a prompt on your phone to confirm the payment.</p>
+    </section>
+  </main>
+
+</body>
+</html>
+
+
