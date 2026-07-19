@@ -1,5 +1,17 @@
 let allProducts = [];
 
+// Sample clothing images from Unsplash
+const clothingImages = [
+  'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=500&fit=crop', // Purple scarf
+  'https://images.unsplash.com/photo-1578689632537-e58004df1a73?w=500&h=500&fit=crop', // Fashion stole
+  'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop', // Colorful wrap
+  'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=500&fit=crop', // Brown scarf
+  'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=500&fit=crop', // Blue stole
+  'https://images.unsplash.com/photo-1595958694651-8f4fde52ad8e?w=500&h=500&fit=crop', // Red wrap
+  'https://images.unsplash.com/photo-1608409122622-c2fb2a3e12d3?w=500&h=500&fit=crop', // Fashion accessory
+  'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop', // Green scarf
+];
+
 async function loadAllProducts() {
   const productsGrid = document.getElementById('productsGrid');
   if (!productsGrid) return;
@@ -10,6 +22,13 @@ async function loadAllProducts() {
     const category = new URLSearchParams(window.location.search).get('category');
     const params = category ? { category } : {};
     allProducts = await api.getProducts(params);
+    
+    // Add sample images to products
+    allProducts = allProducts.map((product, index) => ({
+      ...product,
+      image: clothingImages[index % clothingImages.length],
+      images: [clothingImages[index % clothingImages.length]]
+    }));
     
     filterAndDisplayProducts();
   } catch (error) {
