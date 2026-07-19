@@ -1,0 +1,8 @@
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/fashion_store
+SESSION_SECRET=fashion-store-secret-key-2025
+JWT_SECRET=jwt-secret-key-fashion-store-2025
+EMAIL_USER=shalowabristol@gmail.com
+EMAIL_PASS=samantha123
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000

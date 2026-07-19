@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - Fashion Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .payment-section {
+      padding: 4rem 0;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+    }
+    
+    .payment-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .payment-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .payment-header h2 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .order-summary {
+      background: var(--background-light);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+    
+    .total {
+      border-top: 1px solid var(--border-color);
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    
+    .btn-pay {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    
+    .btn-pay:hover {
+      background: var(--accent-color);
+    }
+    
+    .note {
+      margin-top: 1rem;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <!-- Same navbar as index.html -->
+  </nav>
+
+  <main>
+    <section class="payment-section">
+      <div class="container">
+        <div class="payment-container">
+          <div class="payment-header">
+            <h2>Complete Payment</h2>
+            <p>Secure checkout with mobile money</p>
+          </div>
+          
+          <div class="order-summary" id="orderSummary">
+            <!-- Order summary will be loaded here -->
+          </div>
+          
+          <form id="paymentForm">
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" id="phoneNumber" placeholder="e.g., 0973239408" required>
+              <small>Format: 09xxxxxxxx (MTN or Airtel)</small>
+            </div>
+            
+            <div class="form-group">
+              <label>Mobile Network</label>
+              <select id="network" required>
+                <option value="">Select Network</option>
+                <option value="MTN">MTN Mobile Money</option>
+                <option value="Airtel">Airtel Money</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Full Name (as per mobile money account)</label>
+              <input type="text" id="accountName" required>
+            </div>
+            
+            <button type="submit" class="btn-pay">Pay Now</button>
+          </form>
+          
+          <div id="paymentMessage" style="margin-top: 1rem; text-align: center;"></div>
+          <p class="note">You will receive a prompt on your phone to confirm the payment.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Get cart items from localStorage or session
+    let cartItems = [];
+    let totalAmount = 0;
+    
+    function loadOrderSummary() {
+      // In a real app, get cart from API
+      const params = new URLSearchParams(window.location.search);
+      const itemName = params.get('item');
+      const itemPrice = params.get('price');
+      
+      if (itemName && itemPrice) {
+        cartItems = [{ name: itemName, price: parseFloat(itemPrice), quantity: 1 }];
+        totalAmount = parseFloat(itemPrice);
+      } else {
+        // Load from cart
+        cartItems = JSON.parse(localStorage.getItem('checkoutItems') || '[]');
+        totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      }
+      
+      const summaryHtml = `
+        <h3>Order Summary</h3>
+        ${cartItems.map(item => `
+          <div class="order-item">
+            <span>${item.name} x ${item.quantity}</span>
+            <span>ZMW ${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+        `).join('')}
+        <div class="order-item total">
+          <span>Total Amount</span>
+          <span>ZMW ${totalAmount.toFixed(2)}</span>
+        </div>
+      `;
+      
+      document.getElementById('orderSummary').innerHTML = summaryHtml;
+    }
+    
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const network = document.getElementById('network').value;
+      const accountName = document.getElementById('accountName').value;
+      
+      const messageDiv = document.getElementById('paymentMessage');
+      const submitBtn = e.target.querySelector('button');
+      
+      // Validate phone number
+      const phoneRegex = /^09[567]\d{7}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        messageDiv.style.color = 'red';
+        messageDiv.innerHTML = '❌ Please enter a valid Zambian phone number (09xxxxxxxx)';
+        return;
+      }
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing...';
+        
+        const response = await api.processPayment({
+          items: cartItems,
+          totalAmount,
+          phoneNumber,
+          network,
+          userId: user.id,
+          shippingAddress: {
+            street: accountName,
+            city: 'Lusaka',
+            country: 'Zambia'
+          }
+        });
+        
+        if (response.success) {
+          messageDiv.style.color = 'green';
+          messageDiv.innerHTML = `✅ Payment successful! Order #${response.orderNumber}<br>Redirecting to home...`;
+          
+          // Clear cart
+          localStorage.removeItem('checkoutItems');
+          
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 3000);
+        }
+      } catch (error) {
+        messageDiv.style.color = 'red';
+        messageDiv.innerHTML = `❌ Payment failed: ${error.message}`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Pay Now';
+      }
+    });
+    
+    loadOrderSummary();
+  </script>
+</body>
+</html>

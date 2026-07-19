@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Upload Product Images</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar"><div class="nav-container"><a href="index.html" class="logo"><i class="fas fa-tshirt"></i><span>Fashion Store</span></a></div></nav>
+  <main class="container" style="padding:2rem">
+    <h2>Admin — Product Images</h2>
+    <p>Select a product, choose one or more images, and upload.</p>
+
+    <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
+      <select id="adminProductSelect"></select>
+      <input id="adminFiles" type="file" accept="image/*" multiple>
+      <button id="adminUpload" class="btn-save">Upload</button>
+      <button id="adminSeed" class="btn-save" style="background:#666;">Seed Sample Images</button>
+    </div>
+
+    <div id="adminMessage"></div>
+
+    <div id="adminPreview" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:12px; margin-top:1rem"></div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

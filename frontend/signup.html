@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Fashion Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Join our fashion community</p>
+      </div>
+      
+      <div id="message" class="message" style="display: none;"></div>
+      
+      <form id="signupForm" class="auth-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="fullName" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" required placeholder="Choose a username">
+        </div>
+        
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required placeholder="Create a password">
+        </div>
+        
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="confirmPassword" required placeholder="Confirm your password">
+        </div>
+        
+        <button type="submit" class="btn-auth">Sign Up</button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/api.js"></script>
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const messageDiv = document.getElementById('message');
+      
+      if (password !== confirmPassword) {
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'message error';
+        messageDiv.innerHTML = '❌ Passwords do not match';
+        return;
+      }
+      
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        username: document.getElementById('username').value,
+        password: password
+      };
+      
+      const submitBtn = e.target.querySelector('button');
+      
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+        
+        const data = await api.signup(formData);
+        
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'message success';
+        messageDiv.innerHTML = '✅ Account created successfully! Redirecting...';
+        
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      } catch (error) {
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'message error';
+        messageDiv.innerHTML = `❌ ${error.message}`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up';
+      }
+    });
+  </script>
+</body>
+</html>

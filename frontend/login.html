@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Fashion Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Login to your account</p>
+      </div>
+      
+      <div id="message" class="message" style="display: none;"></div>
+      
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label>Username or Email</label>
+          <input type="text" id="username" required placeholder="Enter your username or email">
+        </div>
+        
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" required placeholder="Enter your password">
+        </div>
+        
+        <button type="submit" class="btn-auth">Login</button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        <p><a href="forgot-password.html">Forgot Password?</a></p>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/api.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const messageDiv = document.getElementById('message');
+      const submitBtn = e.target.querySelector('button');
+      
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Logging in...';
+        
+        const data = await api.login({ username, password });
+        
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'message success';
+        messageDiv.innerHTML = '✅ Login successful! Redirecting...';
+        
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      } catch (error) {
+        messageDiv.style.display = 'block';
+        messageDiv.className = 'message error';
+        messageDiv.innerHTML = `❌ ${error.message}`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>

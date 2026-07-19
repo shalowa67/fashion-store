@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account - Fashion Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .account-section {
+      padding: 3rem 0;
+      background: var(--background-light);
+      min-height: 80vh;
+    }
+    
+    .account-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* Sidebar */
+    .account-sidebar {
+      background: var(--primary-color);
+      color: white;
+      padding: 2rem 1.5rem;
+    }
+    
+    .user-profile {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2.5rem;
+      font-weight: 600;
+    }
+    
+    .user-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .user-email {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    
+    .sidebar-menu {
+      list-style: none;
+    }
+    
+    .sidebar-menu li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 1rem;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    
+    .sidebar-menu a i {
+      width: 20px;
+    }
+    
+    /* Main Content */
+    .account-content {
+      padding: 2rem;
+    }
+    
+    .account-header {
+      margin-bottom: 2rem;
+    }
+    
+    .account-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .account-header p {
+      color: var(--text-light);
+    }
+    
+    /* Dashboard Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--background-light);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .stat-card i {
+      font-size: 2rem;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-card .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    .stat-card .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    /* Profile Form */
+    .profile-form {
+      max-width: 600px;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-family: inherit;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+    
+    .btn-save {
+      padding: 0.8rem 2rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .btn-save:hover {
+      background: var(--accent-color);
+    }
+    
+    /* Orders Table */
+    .orders-table {
+      width: 100%;
+      overflow-x: auto;
+    }
+    
+    .orders-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .orders-table th,
+    .orders-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .orders-table th {
+      background: var(--background-light);
+      font-weight: 600;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background: #fff3e0;
+      color: #ff9800;
+    }
+    
+    .status-processing {
+      background: #e3f2fd;
+      color: #2196f3;
+    }
+    
+    .status-shipped {
+      background: #e8f5e9;
+      color: #4caf50;
+    }
+    
+    .status-delivered {
+      background: #e8f5e9;
+      color: #4caf50;
+    }
+    
+    .status-cancelled {
+      background: #ffebee;
+      color: #f44336;
+    }
+    
+    .btn-view-order {
+      padding: 0.25rem 0.75rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    
+    /* Wishlist */
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .wishlist-item {
+      background: var(--background-light);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .wishlist-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .wishlist-item-info {
+      padding: 1rem;
+    }
+    
+    .wishlist-item-info h4 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .wishlist-item-price {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+    
+    .remove-wishlist {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: #f44336;
+    }
+    
+    /* Address Book */
+    .addresses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .address-card {
+      background: var(--background-light);
+      padding: 1.5rem;
+      border-radius: 12px;
+      position: relative;
+    }
+    
+    .address-card.default {
+      border: 2px solid var(--accent-color);
+    }
+    
+    .address-badge {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--accent-color);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+    
+    /* Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .loading i {
+      font-size: 2rem;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .account-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .account-sidebar {
+        padding: 1rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    /* Change Password Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .modal-content h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .modal-buttons button {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .btn-confirm {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-cancel {
+      background: var(--border-color);
+      color: var(--text-dark);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-tshirt"></i>
+        <span>Fashion Store</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="contact.html">Contact</a>
+        <a href="account.html" class="active">Account</a>
+      </div>
+      <div class="nav-icons">
+        <a href="cart.html" class="cart-icon">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+          <a href="signup.html" class="btn-signup" id="signupBtn">Sign Up</a>
+          <a href="#" class="btn-logout" id="logoutBtn" style="display: none;">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="account-section">
+      <div class="container">
+        <div class="account-container" id="accountContainer">
+          <!-- Content will be loaded dynamically -->
+          <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Loading account information...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Change Password Modal -->
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h3>Change Password</h3>
+      <div class="form-group">
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+      </div>
+      <div id="passwordMessage" style="color: red; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+      <div class="modal-buttons">
+        <button class="btn-confirm" onclick="changePassword()">Update Password</button>
+        <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Fashion Store</h3>
+          <p>Your destination for premium fashion that combines quality, comfort, and style.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Customer Service</h4>
+          <ul>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns Policy</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact Info</h4>
+          <ul>
+            <li><i class="fas fa-phone"></i> +260 973 239408</li>
+            <li><i class="fas fa-envelope"></i> bristolshalowa@gmail.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> Plot 42, Cairo Road, Lusaka</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Fashion Store. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let currentUser = null;
+    let orders = [];
+    let wishlist = [];
+    let addresses = [];
+    let currentSection = 'dashboard';
+
+    // Check authentication
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+
+    // Load user data
+    async function loadUserData() {
+      try {
+        currentUser = JSON.parse(localStorage.getItem('user'));
+        await loadOrders();
+        await loadWishlist();
+        await loadAddresses();
+        renderAccountPage();
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+      }
+    }
+
+    // Load orders
+    async function loadOrders() {
+      try {
+        const response = await api.getOrders();
+        orders = response || [];
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+        orders = [];
+      }
+    }
+
+    // Load wishlist
+    async function loadWishlist() {
+      try {
+        const savedWishlist = localStorage.getItem('wishlist');
+        wishlist = savedWishlist ? JSON.parse(savedWishlist) : [];
+      } catch (error) {
+        wishlist = [];
+      }
+    }
+
+    // Load addresses
+    async function loadAddresses() {
+      try {
+        const savedAddresses = localStorage.getItem('addresses');
+        addresses = savedAddresses ? JSON.parse(savedAddresses) : [];
+        if (addresses.length === 0) {
+          addresses.push({
+            id: 'default',
+            street: 'Plot 42, Cairo Road',
+            city: 'Lusaka',
+            country: 'Zambia',
+            zipCode: '10101',
+            isDefault: true
+          });
+        }
+      } catch (error) {
+        addresses = [];
+      }
+    }
+
+    // Render account page based on current section
+    function renderAccountPage() {
+      const container = document.getElementById('accountContainer');
+      
+      let content = `
+        <div class="account-sidebar">
+          <div class="user-profile">
+            <div class="user-avatar">
+              ${currentUser?.fullName?.charAt(0) || 'U'}
+            </div>
+            <div class="user-name">${currentUser?.fullName || 'User'}</div>
+            <div class="user-email">${currentUser?.email || ''}</div>
+          </div>
+          <ul class="sidebar-menu">
+            <li><a href="#" onclick="switchSection('dashboard'); return false;" class="${currentSection === 'dashboard' ? 'active' : ''}">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a></li>
+            <li><a href="#" onclick="switchSection('orders'); return false;" class="${currentSection === 'orders' ? 'active' : ''}">
+              <i class="fas fa-shopping-bag"></i> My Orders
+            </a></li>
+            <li><a href="#" onclick="switchSection('profile'); return false;" class="${currentSection === 'profile' ? 'active' : ''}">
+              <i class="fas fa-user"></i> Profile Settings
+            </a></li>
+            <li><a href="#" onclick="switchSection('wishlist'); return false;" class="${currentSection === 'wishlist' ? 'active' : ''}">
+              <i class="fas fa-heart"></i> Wishlist
+            </a></li>
+            <li><a href="#" onclick="switchSection('addresses'); return false;" class="${currentSection === 'addresses' ? 'active' : ''}">
+              <i class="fas fa-map-marker-alt"></i> Address Book
+            </a></li>
+            <li><a href="#" onclick="switchSection('security'); return false;" class="${currentSection === 'security' ? 'active' : ''}">
+              <i class="fas fa-lock"></i> Security
+            </a></li>
+          </ul>
+        </div>
+        <div class="account-content">
+          ${renderCurrentSection()}
+        </div>
+      `;
+      
+      container.innerHTML = content;
+      // attach event handlers for dynamic elements (avatar upload, etc.)
+      attachAccountHandlers();
+    }
+
+    // Render current section
+    function renderCurrentSection() {
+      switch(currentSection) {
+        case 'dashboard':
+          return renderDashboard();
+        case 'orders':
+          return renderOrders();
+        case 'profile':
+          return renderProfile();
+        case 'wishlist':
+          return renderWishlist();
+        case 'addresses':
+          return renderAddresses();
+        case 'security':
+          return renderSecurity();
+        default:
+          return renderDashboard();
+      }
+    }
+
+    // Dashboard section
+    function renderDashboard() {
+      const totalOrders = orders.length;
+      const totalSpent = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+      const pendingOrders = orders.filter(o => o.status === 'pending' || o.status === 'processing').length;
+      
+      return `
+        <div class="account-header">
+          <h2>Welcome back, ${currentUser?.fullName?.split(' ')[0] || 'User'}!</h2>
+          <p>Here's what's happening with your account today.</p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <i class="fas fa-shopping-bag"></i>
+            <div class="stat-number">${totalOrders}</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <div class="stat-number">${pendingOrders}</div>
+            <div class="stat-label">Pending Orders</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-heart"></i>
+            <div class="stat-number">${wishlist.length}</div>
+            <div class="stat-label">Wishlist Items</div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-money-bill-wave"></i>
+            <div class="stat-number">ZMW ${totalSpent.toFixed(0)}</div>
+            <div class="stat-label">Total Spent</div>
+          </div>
+        </div>
+        
+        ${orders.length > 0 ? `
+          <div class="account-header" style="margin-top: 2rem;">
+            <h3>Recent Orders</h3>
+          </div>
+          <div class="orders-table">
+            <table>
+              <thead>
+                <tr><th>Order #</th><th>Date</th><th>Total</th><th>Status</th><th></th></tr>
+              </thead>
+              <tbody>
+                ${orders.slice(0, 5).map(order => `
+                  <tr>
+                    <td>${order.orderNumber || 'N/A'}</td>
+                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td>ZMW ${order.totalAmount.toFixed(2)}</td>
+                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                    <td><button class="btn-view-order" onclick="viewOrder('${order._id}')">View</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        ` : `
+          <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>You haven't placed any orders yet.</p>
+            <a href="shop.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Start Shopping</a>
+          </div>
+        `}
+      `;
+    }
+
+    // Orders section
+    function renderOrders() {
+      if (orders.length === 0) {
+        return `
+          <div class="account-header">
+            <h2>My Orders</h2>
+          </div>
+          <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <p>You haven't placed any orders yet.</p>
+            <a href="shop.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Start Shopping</a>
+          </div>
+        `;
+      }
+      
+      return `
+        <div class="account-header">
+          <h2>My Orders</h2>
+          <p>View and track all your orders</p>
+        </div>
+        <div class="orders-table">
+          <table>
+            <thead>
+              <tr><th>Order #</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Payment</th><th></th></tr>
+            </thead>
+            <tbody>
+              ${orders.map(order => `
+                <tr>
+                  <td>${order.orderNumber || 'N/A'}</td>
+                  <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td>${order.items?.length || 0} items</td>
+                  <td>ZMW ${order.totalAmount.toFixed(2)}</td>
+                  <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                  <td><span class="status-badge status-${order.paymentStatus}">${order.paymentStatus}</span></td>
+                  <td><button class="btn-view-order" onclick="viewOrder('${order._id}')">Details</button></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // Profile section
+    function renderProfile() {
+      let avatarSrc = 'https://via.placeholder.com/120';
+      try {
+        if (currentUser && currentUser.avatar) {
+          const a = currentUser.avatar;
+          if (a.startsWith('http') || a.startsWith('data:')) avatarSrc = a;
+          else avatarSrc = location.origin + a;
+        }
+      } catch (_) {}
+      return `
+        <div class="account-header">
+          <h2>Profile Settings</h2>
+          <p>Update your personal information</p>
+        </div>
+        <form class="profile-form" onsubmit="updateProfile(event)">
+          <div class="form-group">
+            <label>Profile Picture</label>
+            <div style="display:flex; gap:1rem; align-items:center;">
+              <img id="accountAvatarPreview" src="${avatarSrc}" alt="avatar" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:1px solid var(--border-color)">
+              <div style="flex:1">
+                <input type="file" id="accountAvatarInput" accept="image/*">
+                <button type="button" id="accountUploadBtn" class="btn-save" style="margin-top:0.5rem;">Upload Avatar</button>
+                <p style="font-size:0.85rem; color:var(--text-light); margin-top:0.5rem;">Upload a profile picture (recommended size 400x400, max 5MB).</p>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" value="${currentUser?.fullName || ''}" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" value="${currentUser?.email || ''}" required disabled>
+            <small>Email cannot be changed</small>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" value="${currentUser?.username || ''}" required disabled>
+            <small>Username cannot be changed</small>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="+260 xxx xxx xxx" value="${currentUser?.phone || ''}">
+          </div>
+          <button type="submit" class="btn-save">Save Changes</button>
+        </form>
+      `;
+    }
+
+    // Wishlist section
+    function renderWishlist() {
+      if (wishlist.length === 0) {
+        return `
+          <div class="account-header">
+            <h2>My Wishlist</h2>
+          </div>
+          <div class="empty-state">
+            <i class="fas fa-heart"></i>
+            <p>Your wishlist is empty.</p>
+            <a href="shop.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Browse Products</a>
+          </div>
+        `;
+      }
+      
+      return `
+        <div class="account-header">
+          <h2>My Wishlist</h2>
+          <p>Products you've saved for later</p>
+        </div>
+        <div class="wishlist-grid">
+          ${wishlist.map(item => `
+            <div class="wishlist-item">
+              <img src="${item.image || 'https://via.placeholder.com/200'}" alt="${item.name}">
+              <button class="remove-wishlist" onclick="removeFromWishlist('${item.id}')">
+                <i class="fas fa-times"></i>
+              </button>
+              <div class="wishlist-item-info">
+                <h4>${item.name}</h4>
+                <div class="wishlist-item-price">ZMW ${item.price.toFixed(2)}</div>
+                <button class="btn-add-cart" style="margin-top: 0.5rem;" onclick="addToCartAndRedirect('${item.id}')">
+                  <i class="fas fa-shopping-bag"></i> Move to Cart
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Addresses section
+    function renderAddresses() {
+      return `
+        <div class="account-header">
+          <h2>Address Book</h2>
+          <p>Manage your shipping addresses</p>
+        </div>
+        <div class="addresses-grid">
+          ${addresses.map(addr => `
+            <div class="address-card ${addr.isDefault ? 'default' : ''}">
+              ${addr.isDefault ? '<div class="address-badge">Default</div>' : ''}
+              <p><strong>${currentUser?.fullName || ''}</strong></p>
+              <p>${addr.street}</p>
+              <p>${addr.city}, ${addr.country} ${addr.zipCode}</p>
+              <p><strong>Phone:</strong> ${currentUser?.phone || 'Not provided'}</p>
+            </div>
+          `).join('')}
+        </div>
+        <button class="btn-save" style="margin-top: 1.5rem;" onclick="addNewAddress()">
+          <i class="fas fa-plus"></i> Add New Address
+        </button>
+      `;
+    }
+
+    // Security section
+    function renderSecurity() {
+      return `
+        <div class="account-header">
+          <h2>Security Settings</h2>
+          <p>Manage your password and security preferences</p>
+        </div>
+        <div class="profile-form">
+          <div class="form-group">
+            <label>Change Password</label>
+            <button class="btn-save" onclick="openPasswordModal()">Change Password</button>
+          </div>
+          <div class="form-group">
+            <label>Two-Factor Authentication</label>
+            <p style="color: var(--text-light); margin-bottom: 0.5rem;">Add an extra layer of security to your account</p>
+            <button class="btn-save" style="background: var(--border-color); color: var(--text-dark);" disabled>Coming Soon</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Switch section
+    function switchSection(section) {
+      currentSection = section;
+      renderAccountPage();
+    }
+
+    // Update profile
+    async function updateProfile(event) {
+      event.preventDefault();
+      const fullName = document.getElementById('fullName').value;
+      const phone = document.getElementById('phone').value;
+      
+      try {
+        const response = await api.request('/auth/profile', {
+          method: 'PUT',
+          body: JSON.stringify({ fullName, phone })
+        });
+        
+        if (response.success) {
+          currentUser = response.user;
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          alert('Profile updated successfully!');
+          renderAccountPage();
+        }
+      } catch (error) {
+        alert('Failed to update profile: ' + error.message);
+      }
+    }
+
+    // View order details
+    function viewOrder(orderId) {
+      window.location.href = `order-details.html?id=${orderId}`;
+    }
+
+    // Add to cart and redirect
+    async function addToCartAndRedirect(productId) {
+      if (!localStorage.getItem('token')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      try {
+        await api.addToCart(productId, 1);
+        window.location.href = 'cart.html';
+      } catch (error) {
+        alert('Failed to add to cart');
+      }
+    }
+
+    // Remove from wishlist
+    function removeFromWishlist(productId) {
+      wishlist = wishlist.filter(item => item.id !== productId);
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      renderAccountPage();
+    }
+
+    // Add new address
+    function addNewAddress() {
+      const street = prompt('Enter street address:');
+      const city = prompt('Enter city:');
+      if (street && city) {
+        addresses.push({
+          id: Date.now().toString(),
+          street,
+          city,
+          country: 'Zambia',
+          zipCode: '10101',
+          isDefault: false
+        });
+        localStorage.setItem('addresses', JSON.stringify(addresses));
+        renderAccountPage();
+      }
+    }
+
+    // Password modal functions
+    function openPasswordModal() {
+      document.getElementById('passwordModal').classList.add('active');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmNewPassword').value = '';
+      document.getElementById('passwordMessage').innerHTML = '';
+    }
+    
+    function closePasswordModal() {
+      document.getElementById('passwordModal').classList.remove('active');
+    }
+    
+    async function changePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmNewPassword').value;
+      const messageDiv = document.getElementById('passwordMessage');
+      
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        messageDiv.innerHTML = 'Please fill in all fields';
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        messageDiv.innerHTML = 'New passwords do not match';
+        return;
+      }
+      
+      if (newPassword.length < 6) {
+        messageDiv.innerHTML = 'Password must be at least 6 characters';
+        return;
+      }
+      
+      try {
+        const response = await api.request('/auth/change-password', {
+          method: 'POST',
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        
+        if (response.success) {
+          alert('Password changed successfully!');
+          closePasswordModal();
+        }
+      } catch (error) {
+        messageDiv.innerHTML = error.message;
+      }
+    }
+
+    // Attach handlers for account page dynamic elements (avatar upload)
+    function attachAccountHandlers() {
+      const avatarInput = document.getElementById('accountAvatarInput');
+      const avatarPreview = document.getElementById('accountAvatarPreview');
+      const uploadBtn = document.getElementById('accountUploadBtn');
+
+      if (avatarInput && avatarPreview) {
+        avatarInput.addEventListener('change', (e) => {
+          const f = e.target.files && e.target.files[0];
+          if (!f) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => { avatarPreview.src = ev.target.result; };
+          reader.readAsDataURL(f);
+        });
+      }
+
+      if (uploadBtn) {
+        uploadBtn.addEventListener('click', async (e) => {
+          const file = document.getElementById('accountAvatarInput')?.files?.[0];
+          if (!file) { alert('Please choose an image first'); return; }
+
+          const token = localStorage.getItem('token');
+          if (navigator.onLine && token) {
+            try {
+              const form = new FormData();
+              form.append('avatar', file);
+              const res = await api.request('/auth/avatar', { method: 'POST', body: form });
+              if (res && res.user) {
+                currentUser = res.user;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                alert('Avatar uploaded');
+                renderAccountPage();
+                return;
+              }
+            } catch (err) {
+              console.warn('Upload failed:', err.message);
+              alert('Upload failed, saving locally');
+            }
+          }
+
+          // Offline or upload failed: save as base64 in local_current_user
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const dataUrl = ev.target.result;
+            if (!currentUser) currentUser = {};
+            currentUser.avatar = dataUrl;
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            // update any local_users array if present
+            try {
+              const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+              const idx = users.findIndex(u => u.username === currentUser.username || u.email === currentUser.email);
+              if (idx !== -1) { users[idx].avatar = dataUrl; localStorage.setItem('local_users', JSON.stringify(users)); }
+            } catch (_) {}
+            alert('Avatar saved locally');
+            renderAccountPage();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    }
+
+    // Update cart count
+    async function updateCartCount() {
+      try {
+        if (localStorage.getItem('token')) {
+          const cart = await api.getCart();
+          const count = cart.totalItems || 0;
+          const cartCountElem = document.getElementById('cartCount');
+          if (cartCountElem) cartCountElem.textContent = count;
+        }
+      } catch (error) {
+        console.error('Failed to fetch cart:', error);
+      }
+    }
+
+    // Check auth and load data
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!checkAuth()) return;
+      
+      // Setup logout
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          window.location.href = 'index.html';
+        });
+      }
+      
+      await loadUserData();
+      await updateCartCount();
+      
+      // Update auth buttons
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (signupBtn) signupBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    });
+  </script>
+</body>
+</html>
